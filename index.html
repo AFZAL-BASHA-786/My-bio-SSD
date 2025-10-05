@@ -82,5 +82,95 @@
             <p>Web Development</p>
         </div>
     </div>
+    <script>
+        // --- JavaScript for Interactivity ---
+
+        // 1. Live Clock Functionality
+        function startTime() {
+            const today = new Date();
+            document.getElementById('live-time').innerHTML = today.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            setTimeout(startTime, 1000);
+        }
+
+        // 2. "Back to Top" Button Functionality
+        const mybutton = document.getElementById("backToTopBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {
+            scrollFunction()
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        function trackUserEvents() {
+  const tagsToTrack = ['img', 'button', 'select', 'input', 'a', 'textarea', 'video', 'div', 'span'];
+
+  // Function to get readable object type
+  function getEventObjectType(tag) {
+    if (tag === 'img') return 'image';
+    if (tag === 'select') return 'drop_down';
+    if (tag === 'button' || tag === 'a') return 'button/link';
+    if (tag === 'input' || tag === 'textarea') return 'text';
+    if (tag === 'video') return 'media';
+    return 'css_object';
+  }
+
+  // Log function
+  function logEvent(type, element) {
+    const tag = element.tagName.toLowerCase();
+    if (tagsToTrack.includes(tag)) {
+      const log = {
+        timestamp_of_click_or_view: new Date().toISOString(),
+        type_of_event: type,
+        event_object: getEventObjectType(tag)
+      };
+      console.log(log);
+    }
+  }
+
+  // Capture all click events
+  document.addEventListener('click', (e) => {
+    logEvent('click', e.target);
+  });
+
+  // Capture page views (elements entering viewport)
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        logEvent('view', entry.target);
+      }
+    });
+  });
+
+  // Observe specified tags
+  tagsToTrack.forEach(tag => {
+    document.querySelectorAll(tag).forEach(el => observer.observe(el));
+  });
+}
+
+// Run the tracker
+trackUserEvents();
+
+    </script>
 </body>
 </html>
